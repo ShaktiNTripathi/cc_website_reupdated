@@ -1,0 +1,4 @@
+{"level":"error","message":"ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '= 'shaktitripathi12228@gmail.com' ?' at line 1"}
+{"level":"error","message":"ER_DUP_ENTRY: Duplicate entry 'shaktinarayan' for key 'PRIMARY'"}
+{"level":"error","message":"ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '= 'shaktitripathi12228@gmail.com' ?' at line 1"}
+{"level":"error","message":"connect ECONNREFUSED ::1:3306"}
