@@ -70,7 +70,15 @@ router.get('/test', (req, res) => {
     console.log(req.body);
 })
 router.post('/signup/', (req, res) => {
+   // const { username, email, password, uname } = req.body;
+    //const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+    //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
     const { username, email, password, uname } = req.body;
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).send({ msg: "Invalid password format. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number." });
+    }
     if (username && email && password && uname) {
         try {
             let select = `SELECT USERNAME, active FROM users WHERE USERNAME= ?`;
@@ -282,7 +290,7 @@ router.post('/signin/', (req, res) => {
                                 }
                                 res.cookie('authorization', `bearer ${token}`);
                                 res.cookie('active', results[0].active);
-                                //res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
+                                res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
                                 res.send({ msg: `login sucessful! welcome ${username}` });
                             });
 
@@ -345,7 +353,7 @@ router.post('/adminsignin/', (req, res) => {
                                 }
                                 res.cookie('authorization', `bearer ${token}`);
                                 res.cookie('active', results[0].active);
-                                //res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
+                                res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
                                 res.send({ msg: `login sucessful! welcome ${username}` });
                             });
 
