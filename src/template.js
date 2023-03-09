@@ -4,21 +4,14 @@ const { checkLogin } = require('./verify');
 const db = require('./dataBase');
 const fetch = require("isomorphic-fetch");
 const passport = require('passport');
-
+const session = require('express-session');
+const razorpay = require('razorpay');
+const config = require('./config');
 //for payment
-const paymentController = require('./paymentController');
 
-router.get('/createorder', paymentController.createOrder);
-router.get('/verifypayment', paymentController.verifyPayment);
 //for payment end
 //for facebook 
 const FacebookStrategy = require('passport-facebook').Strategy;
-
-
-
-
-//end
-
 router.get('/', checkLogin, (req, res) => {
     if (req.name && req.email) {
         res.render('index', {
@@ -36,6 +29,9 @@ router.get('/', checkLogin, (req, res) => {
 //blog Routes//
 router.get('/blog', (req, res)=>{
     res.render('blog');
+})
+router.get('/payment', (req, res)=>{
+    res.render('payment'); 
 })
 //End Blog Routes//
 //carrier Page//
@@ -206,14 +202,7 @@ router.get('/setting', checkLogin, (req, res) => {
     }
 })
  //goole signup regristation
- router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
- router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect('/dashboard');
-});
-router.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
-});
+
 //for facebook//
 router.get('/auth/facebook', passport.authenticate('facebook'));
 

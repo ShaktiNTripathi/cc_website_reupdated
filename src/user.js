@@ -14,9 +14,7 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
-const paymentRoutes = require('./template.js');
-app.use('/payment', paymentRoutes);
-//for payment end//
+
 //to prevent SQL injection && XSS attack through username, email, name
 router.use((req, res, next) => {
     const { username, email, uname } = req.body;
@@ -66,8 +64,6 @@ router.use((req, res, next) => {
     next();
 
 })
-
-
 
 router.get('/test', (req, res) => {
     res.json({ msg: "router working" })
@@ -138,14 +134,13 @@ router.post('/signup/', (req, res) => {
                                 username: username,
                                 ID: ID
                             }
-
                             jwt.sign({ user }, process.env.JWT_token, { expiresIn: '3600s' }, (err, token) => {
                                 if (err) {
                                     res.json({ err });
                                 }
                                 res.cookie('authorization', `bearer ${token}`);
                                 res.cookie('active', 0);
-                                //res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
+                                res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
                                 res.status(200).send({ msg: `account created!! welcome ${username}, please verify your OTP sent to your email` });
                             });
 
@@ -528,7 +523,7 @@ router.post('/forgetpassword/otp/send', (req, res) => {
                                     res.json({ err });
                                 }
                                 res.cookie('OTPauthorization', `code: ${token}`);
-                                //res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
+                                res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
                                 res.send({ msg: `enter new password` });
                             });
                         } else {
@@ -657,27 +652,6 @@ router.post('/signout/all', verifyToken, (req, res) => {
 })
 
 //google signup
-app.use(cookieParser());
-app.use(session({
-    secret: '32424',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new GoogleStrategy({
-    clientID: '352248314466-kmvqd8rtf3gt5acpk8afmt1m6rmco340.apps.googleusercontent.com',
-    clientSecret: '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',
-    callbackURL: 'http://localhost:3000/auth/google/callback'
-}, 
- (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken);
-    console.log(refreshToken);
-    console.log(profile);// Here you can handle the user profile data returned by Google
-}));
 
 //for facebook
 passport.use(new FacebookStrategy({
